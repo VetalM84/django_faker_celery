@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fake_data_generator.apps.FakeDataGeneratorConfig',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,19 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'django_faker_celery.urls'
+
+SESSION_COOKIE_AGE = 3600
+
+# celery-rabbitmq
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_BROKER_URL = 'amqp://localhost'
+
+# celery
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Amsterdam'
 
 TEMPLATES = [
     {
