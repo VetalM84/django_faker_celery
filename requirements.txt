@@ -1,0 +1,4 @@
+Django~=4.0.5
+celery==5.2.7
+django-celery-results==2.3.1
+Faker==13.14.0
