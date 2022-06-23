@@ -1,4 +1,4 @@
-{{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block body %}
@@ -12,7 +12,7 @@
 
     <form method="POST">
         {% csrf_token %}
-        {{ review_form }}
+        {{ form }}
         <button type="submit">Create</button>
     </form>
 
