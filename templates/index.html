@@ -1,0 +1,19 @@
+{{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: green">{{ message }}</p>
+        {% endfor %}
+        <hr>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ review_form }}
+        <button type="submit">Create</button>
+    </form>
+
+{% endblock %}
