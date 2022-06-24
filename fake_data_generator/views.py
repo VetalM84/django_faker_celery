@@ -18,7 +18,7 @@ class HomeView(FormView):
         generate_fake_data.delay(form.cleaned_data.get("total"))
         messages.success(
             self.request,
-            f"Data generation started. You've made {self.request.session.get(total_by_user)} rows in total in this "
-            f"session",
+            f"Data generation started. You've made {self.request.session.get('total_by_user')} "
+            f"rows in total in this session",
         )
         return redirect("home")
