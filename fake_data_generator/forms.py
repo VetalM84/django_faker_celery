@@ -6,4 +6,6 @@ class FakeDataForm(forms.Form):
         label="Total rows to create",
         min_value=10,
         max_value=100000,
+        initial=10,
+        widget=forms.NumberInput(),
     )

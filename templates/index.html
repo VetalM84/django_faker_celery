@@ -1,19 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block heading %}
+    Data generation
+{% endblock %}
+
 {% block body %}
-<h1>{{ title }}</h1>
-    {% if messages %}
-        {% for message in messages %}
-            <p style="color: green">{{ message }}</p>
-        {% endfor %}
-        <hr>
-    {% endif %}
 
     <form method="POST">
         {% csrf_token %}
         {{ form }}
-        <button type="submit">Create</button>
+        <button class="btn btn-primary" type="submit"> Create</button>
     </form>
 
 {% endblock %}

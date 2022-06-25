@@ -1,18 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block body %}
-<h1>{{ title }}</h1>
-    {% if messages %}
-        {% for message in messages %}
-            <p style="color: green">{{ message }}</p>
-        {% endfor %}
-        <hr>
-    {% endif %}
-    <p>Task result</p>
-    {{ task_result }}
-    <p>Task state</p>
-    {{ task_state }}
+{% block heading %}
+    Data generation status
+{% endblock %}
 
+{% block body %}
+
+    <p><strong>Task id:</strong> {{ task_result }}</p>
+    <p><strong>Task state:</strong> {{ task_state }}</p>
+    <p><strong>Task result:</strong> {{ task_result }}</p>
 
 {% endblock %}
