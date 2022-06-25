@@ -25,7 +25,7 @@ class HomeView(FormView):
         return redirect("home")
 
 
-def result_view(request, task_id):
+def task_result_view(request, task_id):
     task = AsyncResult(id=task_id)
     context = {
         "task": task,
@@ -33,23 +33,3 @@ def result_view(request, task_id):
         "task_result": task.get(),
     }
     return render(request, "result.html", context)
-
-
-# def get_model_info(request, model_id):
-#     """получаем информацию о конкретной модели авто"""
-#     car_model = CarModel.objects.get(pk=model_id)
-#     car_brand = CarBrand.objects.get(pk=car_model.brand_id)
-#     # отображаем только уникальные запчасти у которых есть отзыв к этой модели
-#     spare_parts = (
-#         Review.objects.filter(car_model_id=model_id)
-#         .order_by("spare_part__name")
-#         .distinct("spare_part__name", "spare_part__brand", "spare_part__number")
-#         .select_related("spare_part")
-#     )
-#     context = {
-#         "spare_parts": spare_parts,
-#         "car_model": car_model,
-#         "car_brand": car_brand,
-#         "title": f"Все для {car_brand.brand} {car_model.model_name}",
-#     }
-#     return render(request, "mileage/model_info.html", context)
