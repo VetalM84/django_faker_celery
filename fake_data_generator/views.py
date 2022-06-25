@@ -12,6 +12,7 @@ class HomeView(FormView):
     form_class = FakeDataForm
 
     def form_valid(self, form):
+        # TODO add links to generated files to session
         total_by_user = self.request.session.get("total_by_user", 0)
         self.request.session["total_by_user"] = total_by_user + form.cleaned_data.get(
             "total"
@@ -20,9 +21,9 @@ class HomeView(FormView):
         messages.success(
             self.request,
             f"Data generation started. You've made {self.request.session.get('total_by_user')} "
-            f"rows in total in this session. <a href='result/{task.id}'>here</a>",
+            f"rows in total in this session.",
         )
-        return redirect("home")
+        return redirect("result", task_id=task.id)
 
 
 def task_result_view(request, task_id):
