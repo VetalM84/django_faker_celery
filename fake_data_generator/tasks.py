@@ -16,6 +16,7 @@ def make_csv(data: List[Any]) -> TextIO:
     headers: List[str] = ["name", "phone", "email"]
     try:
         os.mkdir(path="data_files")
+    except FileExistsError:
         file_path = os.path.normpath(f"data_files/{current_time}.csv")
         with open(file=file_path, mode="w", encoding="UTF-8", newline="") as csv_file:
             writer = csv.writer(
@@ -23,8 +24,6 @@ def make_csv(data: List[Any]) -> TextIO:
             )
             writer.writerow(headers)
             writer.writerows(data)
-    except FileNotFoundError:
-        print("Error, can not create file. Contact support")
     return csv_file
 
 

@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 from django.views.generic.edit import FormView
 
 from .forms import FakeDataForm
-from .tasks import generate_fake_data, make_csv
+from .tasks import generate_fake_data
 
 
 class HomeView(FormView):
@@ -18,7 +18,7 @@ class HomeView(FormView):
             "total"
         )
         task = generate_fake_data.delay(form.cleaned_data.get("total"))
-        messages.success(
+        messages.info(
             self.request,
             f"Data generation started. You've made {self.request.session.get('total_by_user')} "
             f"rows in total in this session.",
