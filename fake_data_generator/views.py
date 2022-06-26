@@ -20,17 +20,11 @@ class HomeView(FormView):
         task = generate_fake_data.delay(form.cleaned_data.get("total"))
         messages.info(
             self.request,
-            f"Data generation started. You've made {self.request.session.get('total_by_user')} "
-            f"rows in total in this session.",
+            f"Data generation started. You've made {total_by_user} rows in total in this session.",
         )
         return redirect("result", task_id=task.id)
 
 
 def task_result_view(request, task_id):
     task = AsyncResult(id=task_id)
-    context = {
-        "task": task,
-        "task_state": task.state,
-        "task_result": task.get(),
-    }
-    return render(request, "result.html", context)
+    return render(request, "result.html", context={"task": task})
