@@ -57,7 +57,8 @@ SESSION_COOKIE_AGE = 3600
 # celery-rabbitmq
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_CACHE_BACKEND = 'django-cache'
-CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL', 'amqp://localhost')
+BROKER_POOL_LIMIT = 1
 
 # celery
 CELERY_ACCEPT_CONTENT = ['application/json']
