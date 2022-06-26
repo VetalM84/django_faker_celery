@@ -21,8 +21,8 @@ def make_csv(data: List[Any]) -> TextIO:
             writer = csv.writer(
                 csv_file, delimiter=";", quotechar='"', quoting=csv.QUOTE_MINIMAL
             )
-            writer.writerow(row=headers)
-            writer.writerows(rows=data)
+            writer.writerow(headers)
+            writer.writerows(data)
     except FileNotFoundError:
         print("Error, can not create file. Contact support")
     return csv_file
