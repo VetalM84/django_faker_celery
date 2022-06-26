@@ -1,4 +1,5 @@
 import csv
+import os
 from datetime import datetime
 from typing import Any, List, TextIO
 
@@ -13,12 +14,17 @@ fake = Faker()
 def make_csv(data: List[Any]) -> TextIO:
     current_time = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
     headers: List[str] = ["name", "phone", "email"]
-    with open(file=f"data_files/fake_data_{current_time}.csv", mode="w", encoding="UTF-8", newline="") as csv_file:
-        writer = csv.writer(
-            csv_file, delimiter=";", quotechar='"', quoting=csv.QUOTE_MINIMAL
-        )
-        writer.writerow(headers)
-        writer.writerows(data)
+    try:
+        os.mkdir(path="data_files")
+        file_path = os.path.normpath(f"data_files/{current_time}.csv")
+        with open(file=file_path, mode="w", encoding="UTF-8", newline="") as csv_file:
+            writer = csv.writer(
+                csv_file, delimiter=";", quotechar='"', quoting=csv.QUOTE_MINIMAL
+            )
+            writer.writerow(row=headers)
+            writer.writerows(rows=data)
+    except FileNotFoundError:
+        print("Error, can not create file. Contact support")
     return csv_file
 
 
