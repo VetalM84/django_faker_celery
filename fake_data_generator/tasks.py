@@ -13,11 +13,11 @@ fake = Faker()
 def make_csv(data: List[Any], task_id: str):
     headers: List[str] = ["name", "phone", "email"]
     try:
-        os.mkdir(path="data_files")
+        os.mkdir(path="tmp")
     except FileExistsError:
         print("Directory already exists")
 
-    file_path = os.path.normpath(f"data_files/{task_id}.csv")
+    file_path = os.path.normpath(f"tmp/{task_id}.csv")
     with open(file=file_path, mode="w", encoding="UTF-8", newline="") as csv_file:
         writer = csv.writer(
             csv_file, delimiter=";", quotechar='"', quoting=csv.QUOTE_MINIMAL
