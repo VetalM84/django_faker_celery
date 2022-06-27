@@ -12,7 +12,6 @@ class HomeView(FormView):
     form_class = FakeDataForm
 
     def form_valid(self, form):
-        # TODO add links to generated files to session
         total_by_user = self.request.session.get("total_by_user", 0)
         self.request.session["total_by_user"] = total_by_user + form.cleaned_data.get(
             "total"
@@ -27,4 +26,11 @@ class HomeView(FormView):
 
 def task_result_view(request, task_id):
     task = AsyncResult(id=task_id)
-    return render(request, "result.html", context={"task": task})
+    if 'saved_list' not in request.session or not request.session['saved_list']:
+        request.session['saved_list'] = [task_id]
+    else:
+        saved_list = request.session['saved_list']
+        if task_id not in saved_list:
+            saved_list.append(task_id)
+        request.session['saved_list'] = saved_list
+    return render(request, "result.html", context={"task": task, "saved_list": request.session['saved_list']})

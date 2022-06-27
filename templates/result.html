@@ -9,9 +9,17 @@
     {% if task.state == 'PENDING' %}
        <p><strong>Task result:</strong> IN PROGRESS</p>
     {% elif task.state == 'SUCCESS' %}
-        <p><strong>Task result:</strong> {{ task.result }} <a href="/../data_files/{{ task.task_id }}.csv">Download file</a></p>
+        <p><strong>Task result:</strong> {{ task.result }} <a href="/../tmp/{{ task.task_id }}.csv">Download file</a></p>
     {% else %}
       <p><strong>Task result:</strong> {{ task.result }}</p>
     {% endif %}
+
+    <ol>
+    {% for item in saved_list %}
+            <li>{{ item }}</li>
+    {% empty %}
+        <p>No data files yet</p>
+    {% endfor %}
+    </ol>
 
 {% endblock %}
