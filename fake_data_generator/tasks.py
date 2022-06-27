@@ -18,12 +18,15 @@ def make_csv(data: List[Any], task_id: str) -> TextIO:
         print("Directory already exists")
 
     file_path = os.path.normpath(f"data_files/{task_id}.csv")
-    with open(file=file_path, mode="w", encoding="UTF-8", newline="") as csv_file:
-        writer = csv.writer(
-            csv_file, delimiter=";", quotechar='"', quoting=csv.QUOTE_MINIMAL
-        )
-        writer.writerow(headers)
-        writer.writerows(data)
+    try:
+        with open(file=file_path, mode="w", encoding="UTF-8", newline="") as csv_file:
+            writer = csv.writer(
+                csv_file, delimiter=";", quotechar='"', quoting=csv.QUOTE_MINIMAL
+            )
+            writer.writerow(headers)
+            writer.writerows(data)
+    except Exception as e:
+        print(e)
     return csv_file
 
 
