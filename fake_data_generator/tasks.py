@@ -1,3 +1,5 @@
+"""Tasks for Celery"""
+
 import csv
 import os
 from typing import Any, List
@@ -11,6 +13,7 @@ fake = Faker()
 
 @app.task
 def make_csv(data: List[Any], task_id: str):
+    """Produce csv file with generated fake data and name it as task id."""
     headers: List[str] = ["name", "phone", "email"]
     try:
         os.mkdir(path="tmp")
@@ -29,6 +32,7 @@ def make_csv(data: List[Any], task_id: str):
 
 @app.task(bind=True)
 def generate_fake_data(self, total: int):
+    """Generate fake data function."""
     fake_data: List[Any] = []
     for _ in range(total):
         name = fake.name()

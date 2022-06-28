@@ -1,3 +1,5 @@
+"""View functions to render frontend."""
+
 from celery.result import AsyncResult
 from django.contrib import messages
 from django.shortcuts import redirect, render
@@ -8,6 +10,8 @@ from .tasks import generate_fake_data
 
 
 class HomeView(FormView):
+    """Main page. Get session variables. Check form and start generate data task."""
+
     template_name = "index.html"
     form_class = FakeDataForm
 
@@ -25,6 +29,7 @@ class HomeView(FormView):
 
 
 def task_result_view(request, task_id):
+    """Get session data with list of created files. Get task status and result."""
     task = AsyncResult(id=task_id)
     if 'saved_list' not in request.session or not request.session['saved_list']:
         request.session['saved_list'] = [task_id]
