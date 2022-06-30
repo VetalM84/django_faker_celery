@@ -13,14 +13,9 @@ from django_faker_celery.celery import app
 fake = Faker()
 
 
+@app.task
 def upload_file(file_name, bucket, object_name=None):
-    """Upload a file to an S3 bucket
-
-    :param file_name: File to upload
-    :param bucket: Bucket to upload to
-    :param object_name: S3 object name. If not specified then file_name is used
-    :return: True if file was uploaded, else False
-    """
+    """Upload a file to an S3 bucket."""
 
     # If S3 object_name was not specified, use file_name
     if object_name is None:
@@ -41,19 +36,14 @@ def make_csv(data: List[Any], task_id: str):
     """Produce csv file with generated fake data and name it as task id."""
     headers: List[str] = ["name", "phone", "email"]
 
-    file_path = os.path.normpath(os.path.basename(f"{task_id}.csv"))
-    print(f"File path: {file_path}")
+    file_path = os.path.normpath(f"tmp/{task_id}.csv")
     with open(file=file_path, mode="w", encoding="UTF-8", newline="") as csv_file:
         writer = csv.writer(
             csv_file, delimiter=";", quotechar='"', quoting=csv.QUOTE_MINIMAL
         )
         writer.writerow(headers)
         writer.writerows(data)
-        upload_file(
-            file_name=csv_file,
-            bucket=os.getenv("AWS_STORAGE_BUCKET_NAME"),
-        )
-    return True
+    return csv_file
 
 
 @app.task(bind=True)
@@ -66,6 +56,9 @@ def generate_fake_data(self, total: int):
         email = fake.email()
         fake_data.append([name, phone, email])
 
-    make_csv(data=fake_data, task_id=self.request.id)
-
+    csv_file = make_csv(data=fake_data, task_id=self.request.id)
+    upload_file(
+        file_name=csv_file,
+        bucket=os.getenv("AWS_STORAGE_BUCKET_NAME"),
+    )
     return f"{total} random data rows created."
