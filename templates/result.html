@@ -6,10 +6,14 @@
 
 {% block body %}
     <p><strong>Task id:</strong> {{ task.id }}</p>
+    task.state: {{ task.state }}
+    Task result: {{ task.result }}
+    {% comment %}
     {% if task.state == 'PENDING' %}
        <p><strong>Task result:</strong> IN PROGRESS</p>
-    {% elif task.state == 'SUCCESS' %}
-        <p><strong>Task result:</strong> {{ task.result }} <a href="/../tmp/{{ task.task_id }}.csv">Download file</a></p>
+    {% endcomment %}
+    {% if task.state == 'SUCCESS' %}
+        <p><strong>Task result:</strong> {{ task.result }} <a href="{{ aws }}/tmp/{{ task.task_id }}.csv">Download file</a></p>
     {% else %}
       <p><strong>Task result:</strong> {{ task.result }}</p>
     {% endif %}
