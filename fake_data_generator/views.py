@@ -37,7 +37,7 @@ def task_result_view(request, task_id: str):
 
     # Get task status
     task = AsyncResult(id=task_id)
-    print("task.backend: " + task.backend)
+    print(task.backend)
 
     # Get session data, put items in list
     if "saved_list" not in request.session or not request.session["saved_list"]:
