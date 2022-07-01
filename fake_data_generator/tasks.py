@@ -2,34 +2,26 @@
 import csv
 import logging
 import os
-from typing import Any, List
 from io import StringIO
+from typing import Any, List
 
 import boto3
 from botocore.exceptions import ClientError
 from faker import Faker
 
 from django_faker_celery.celery import app
-from django_faker_celery.storage_backends import StaticStorage, PublicMediaStorage
 
 fake = Faker()
 
 
 @app.task
-def upload_file(file_name, bucket, data):
+def upload_file(file_name: str, bucket: str, data: StringIO) -> bool:
     """Upload a file to an S3 bucket."""
-    # If S3 object_name was not specified, use file_name
-    # if object_name is None:
-    #     object_name = os.path.basename(file_name)
-
-    # Upload the file
     s3_client = boto3.client("s3")
-    # raw_file = bytes(file_name.getvalue())  # convert to bytes
     try:
         response = s3_client.put_object(
             Body=data.getvalue(), Bucket=bucket, Key=f"upload/{file_name}.csv"
         )
-        # response = s3_client.put_object(raw_file, bucket, object_name)
     except ClientError as e:
         logging.error(e)
         return False
@@ -38,9 +30,10 @@ def upload_file(file_name, bucket, data):
 
 @app.task
 def make_csv(data: List[Any]) -> StringIO:
-    """Produce csv file with generated fake data and name it as task id."""
+    """Generate a fake data and store it in memory."""
     headers: List[str] = ["name", "phone", "email"]
 
+    # Create a StringIO object to store the data in memory
     file_buffer = StringIO()
 
     writer = csv.writer(
@@ -61,10 +54,13 @@ def generate_fake_data(self, total: int):
         email = fake.email()
         fake_data.append([name, phone, email])
 
-    csv_file = make_csv(data=fake_data)
+    # Generate a CSV file to memory
+    csv_in_memory = make_csv(data=fake_data)
+
+    # Upload the CSV file to S3
     upload_file(
         file_name=self.request.id,
         bucket=os.getenv("AWS_STORAGE_BUCKET_NAME"),
-        data=csv_file,
+        data=csv_in_memory,
     )
     return f"{total} random data rows created."

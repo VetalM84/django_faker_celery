@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.views.generic.edit import FormView
 
+from django_faker_celery.settings import AWS_S3_CUSTOM_DOMAIN
+
 from .forms import FakeDataForm
 from .tasks import generate_fake_data
 
@@ -29,13 +31,26 @@ class HomeView(FormView):
 
 
 def task_result_view(request, task_id):
-    """Get session data with list of created files. Get task status and result."""
+    """
+    Get task status and result.
+    Get session data with list of created files."""
+
+    # Get task status
     task = AsyncResult(id=task_id)
-    if 'saved_list' not in request.session or not request.session['saved_list']:
-        request.session['saved_list'] = [task_id]
+    # TODO remove print
+    print(task.status)
+
+    # Get session data, put items in list
+    if "saved_list" not in request.session or not request.session["saved_list"]:
+        request.session["saved_list"] = [task_id]
     else:
-        saved_list = request.session['saved_list']
+        saved_list = request.session["saved_list"]
         if task_id not in saved_list:
             saved_list.append(task_id)
-        request.session['saved_list'] = saved_list
-    return render(request, "result.html", context={"task": task, "saved_list": request.session['saved_list']})
+        request.session["saved_list"] = saved_list
+
+    return render(
+        request,
+        "result.html",
+        context={"task": task, "saved_list": request.session["saved_list"], "aws": AWS_S3_CUSTOM_DOMAIN},
+    )
