@@ -30,15 +30,13 @@ class HomeView(FormView):
         return redirect("result", task_id=task.id)
 
 
-def task_result_view(request, task_id):
+def task_result_view(request, task_id: str):
     """
     Get task status and result.
     Get session data with list of created files."""
 
     # Get task status
     task = AsyncResult(id=task_id)
-    # TODO remove print
-    print(task.status)
 
     # Get session data, put items in list
     if "saved_list" not in request.session or not request.session["saved_list"]:
@@ -52,5 +50,9 @@ def task_result_view(request, task_id):
     return render(
         request,
         "result.html",
-        context={"task": task, "saved_list": request.session["saved_list"], "aws": AWS_S3_CUSTOM_DOMAIN},
+        context={
+            "task": task,
+            "saved_list": request.session["saved_list"],
+            "aws": AWS_S3_CUSTOM_DOMAIN + "/uploads/",
+        },
     )
