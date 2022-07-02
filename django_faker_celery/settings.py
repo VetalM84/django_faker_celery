@@ -56,11 +56,16 @@ ROOT_URLCONF = 'django_faker_celery.urls'
 
 SESSION_COOKIE_AGE = 3600
 
+# celery-redis
+CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
+CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
+
 # celery-rabbitmq
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_CACHE_BACKEND = 'django-cache'
+# CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_CACHE_BACKEND = 'django-cache'
+
 # celery on Heroku
-CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL', 'amqp://localhost')
+# CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL', 'amqp://localhost')
 BROKER_POOL_LIMIT = 1
 
 # celery
