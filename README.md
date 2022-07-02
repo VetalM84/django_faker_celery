@@ -1,7 +1,8 @@
 Deployed on Heroku https://django-celery-faker.herokuapp.com/
 
-A learning project with Django + Faker + Celery + RabbitMQ (CloudAMQP Broker).
-Due to read-only file system on Heroku, files are not saved to disk.
+A learning project with Django + Faker + Celery + RabbitMQ (CloudAMQP Broker) or Redis.
+Django static files are served from AWS S3.
+CSV files generate in memory and then upload to AWS S3.  
 
 Manual to start services:
 #### Celery on Windows
