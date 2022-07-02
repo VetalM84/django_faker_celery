@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fake_data_generator.apps.FakeDataGeneratorConfig',
-    'django_celery_results',
     'storages',
 ]
 
