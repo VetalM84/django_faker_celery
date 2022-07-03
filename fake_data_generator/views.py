@@ -54,6 +54,6 @@ def task_result_view(request, task_id: str):
         context={
             "task": task,
             "saved_list": request.session["saved_list"],
-            "aws": AWS_S3_CUSTOM_DOMAIN + "/uploads/",
+            "aws": "https://" + AWS_S3_CUSTOM_DOMAIN + "/uploads/",
         },
     )
